@@ -19,8 +19,8 @@ Abstract:
 
 --*/
 
-#include <typeinfo>
 #include "pal/thread.hpp"
+#include <typeinfo>
 #include "signal.hpp"
 #include "pal/handleapi.hpp"
 #include "pal/seh.hpp"
