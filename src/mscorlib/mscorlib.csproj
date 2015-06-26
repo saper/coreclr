@@ -145,11 +145,14 @@
     <MscorlibSources Include="$(BclSourcesRoot)\mscorlib.Friends.cs" />
   </ItemGroup>
 
-  <ItemGroup>
+  <ItemGroup Condition="'$(OS)'=='Windows_NT'">
     <!-- We want the sources to show up nicely in VS-->
     <Compile Include="@(MscorlibSources)">
       <Link>$([MSBuild]::MakeRelative($(BclSourcesRoot), %(Identity))</Link>
     </Compile>
+  </ItemGroup>
+  <ItemGroup Condition="'$(OS)'!='Windows_NT'">
+    <Compile Include="@(MscorlibSources)" />
   </ItemGroup>
   
   <!-- Resources -->

@@ -13,7 +13,7 @@
     <PostProcessingTargets>RewriteWithBclRewriter</PostProcessingTargets>
   </PropertyGroup>
 
-  <Target Name="AfterBuild" DependsOnTargets="$(PostProcessingTargets)"
+  <Target Name="AfterBuild" DependsOnTargets="$(PostProcessingTargets)" Condition="'$(OS)' == 'Windows_NT'">
           Inputs="@(RewrittenAssembly)" Outputs="$(FinalOutputPath)\%(RewrittenAssembly.FileName)%(RewrittenAssembly.Extension)">
     
     <!-- Copy to the final output location -->

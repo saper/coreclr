@@ -96,12 +96,20 @@
   </Target>
 
   
-  <PropertyGroup>
+  <PropertyGroup Condition="$(OS)=='Windows_NT">
     <WindowsSdkDir Condition="'$(WindowsSdkDir)'==''">$(registry:HKEY_LOCAL_MACHINE\SOFTWARE\Wow6432Node\Microsoft\Microsoft SDKs\Windows\v8.1@InstallationFolder)</WindowsSdkDir>
     <RCPath Condition="'$(RCPath)' == ''">$(WindowsSdkDir)bin\x86\rc.exe</RCPath>
   </PropertyGroup>
+  <PropertyGroup Condition="$(OS)!='Windows_NT">
+    <WINDRES Conditon="$(WINDRES)==''">/usr/local/bin/windres</WINDRES>
+    <GCC Conditon="$(GCC)==''">gcc</GCC>
+  </PropertyGroup>
   
-  <Target Name="NativeResourceCompile" DependsOnTargets="GenerateVersionHeader" Inputs="$(MsBuildThisFileDirectory)NativeVersion.rc" Outputs="$(Win32Resource)">
+  <Target Name="NativeResourceCompile" DependsOnTargets="GenerateVersionHeader" Inputs="$(MsBuildThisFileDirectory)NativeVersion.rc" Outputs="$(Win32Resource)" Condition="$(OS)=='Windows_NT">
     <Exec Command="&quot;$(RCPath)&quot; /nologo /x /i &quot;$(IntermediateOutputPath.TrimEnd('\'))&quot; /i &quot;$(WindowsSdkDir)Include\um&quot; /i &quot;$(WindowsSdkDir)Include\shared&quot; /D _UNICODE /D UNICODE /l&quot;0x0409&quot; /r /fo &quot;$(Win32Resource)&quot; &quot;$(MsBuildThisFileDirectory)NativeVersion.rc&quot;" />
+  </Target>
+
+  <Target Name="NativeResourceCompile" DependsOnTargets="GenerateVersionHeader" Inputs="$(MsBuildThisFileDirectory)NativeVersion.rc" Outputs="$(Win32Resource)" Condition="$(OS)!='Windows_NT">
+    <Exec Command="$(WINDRES) -I $(IntermediateOutputPath.TrimEnd('\')) -I$(WindowsSdkDir)/include -D_UNICODE -DUNICODE --preprocessor &quot;$(GCC) -E -xc-header -DRC_INVOKED&quot; -l0x0409  -o $(Win32Resource) $(MsBuildThisFileDirectory)NativeVersion.rc" />
   </Target>
 </Project>

@@ -16,7 +16,7 @@
     <RewrittenAssembly Include="$(BclRewriterOutput)" />
   </ItemGroup>
   
-  <Target Name="RewriteWithBclRewriter" 
+  <Target Name="RewriteWithBclRewriter" Condition="'$(OS)' == 'Windows_NT'">
           Inputs="@(AnnotatedAssembly)" Outputs="@(RewrittenAssembly)">
 
     <PropertyGroup>
