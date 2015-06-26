@@ -8,7 +8,7 @@
     <Message Text="Generating module name response file: $(IntermediateOutputPath)\moduleName.rsp" />
 
     <!-- When Roslyn is NOT enabled, we need to set the module name for mscorlib -->
-    <WriteLinesToFile Condition="'$(UseMSCompiler)'=='true'"
+    <WriteLinesToFile Condition="'$(UseRoslynCompiler)'!='true' and '$(UseMonoCompiler)'!='true'"
                       File="$(IntermediateOutputPath)\moduleName.rsp"
                       Lines="/test:moduleName=CommonLanguageRuntimeLibrary"
                       Overwrite="true" />
@@ -21,7 +21,7 @@
 
     <WriteLinesToFile Condition="'$(UseMonoCompiler)'=='true'"
                       File="$(IntermediateOutputPath)\moduleName.rsp"
-					  Lines="/nostdlib"
+                      Lines="/nostdlib"
                       Overwrite="true" />
 
     <ItemGroup>
